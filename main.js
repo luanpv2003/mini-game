@@ -203,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Khởi tạo game ---
     function initGame() {
+        setupFullscreen(); // Khôi phục lại chức năng toàn màn hình
         correctSound.src = 'sounds/correct-6033.mp3';
         wrongSound.src = 'sounds/error-04-199275.mp3';
 
