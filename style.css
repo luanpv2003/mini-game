@@ -1,0 +1,109 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f8ff;
+    margin: 0;
+}
+
+h1 {
+    color: #4a4a4a;
+}
+
+#game-container {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    overflow: hidden; /* Important for animations */
+}
+
+#question-area {
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+#question-area.exit {
+    transform: translateX(-100%);
+    opacity: 0;
+}
+
+#question-area.enter {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+#question-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 250px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+#question-text {
+    font-size: 1.2em;
+    color: #333;
+    min-height: 50px;
+}
+
+#answer-buttons {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+#true-btn {
+    background-color: #28a745; /* Green */
+}
+
+#true-btn:hover {
+    background-color: #218838;
+}
+
+#false-btn {
+    background-color: #dc3545; /* Red */
+}
+
+#false-btn:hover {
+    background-color: #c82333;
+}
+
+#next-btn {
+    background-color: #007bff; /* Blue */
+    display: none; /* Hidden by default */
+}
+
+#next-btn:hover {
+    background-color: #0056b3;
+}
+
+.correct {
+    background-color: #28a745 !important;
+    box-shadow: 0 0 15px #28a745;
+}
+
+.wrong {
+    background-color: #dc3545 !important;
+    box-shadow: 0 0 15px #dc3545;
+}

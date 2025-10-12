@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò Chơi Đúng Sai</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Trò Chơi Đúng Sai</h1>
+    <div id="game-container">
+        <div id="question-area" class="active">
+            <img id="question-image" src="" alt="Hình ảnh câu hỏi">
+            <p id="question-text"></p>
+        </div>
+        <div id="answer-buttons">
+            <button class="btn" id="true-btn">Đúng</button>
+            <button class="btn" id="false-btn">Sai</button>
+        </div>
+        <button class="btn" id="next-btn" style="display: none;">Câu tiếp theo</button>
+    </div>
+
+    <!-- Audio files -->
+    <audio id="background-music" loop></audio>
+    <audio id="correct-sound"></audio>
+    <audio id="wrong-sound"></audio>
+
+    <script src="main.js"></script>
+</body>
+</html>
