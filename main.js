@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageAnswersContainer = document.getElementById('image-answers');
     const nextBtn = document.getElementById('next-btn');
     const questionArea = document.getElementById('question-area');
-
-    const backgroundMusic = document.getElementById('background-music');
+    
     const correctSound = document.getElementById('correct-sound');
     const wrongSound = document.getElementById('wrong-sound');
 
@@ -169,15 +168,43 @@ document.addEventListener('DOMContentLoaded', () => {
     falseBtn.addEventListener('click', () => handleAnswer(!questions[currentQuestionIndex].answer, falseBtn));
     nextBtn.addEventListener('click', nextQuestion);
 
+    // --- Logic Toàn màn hình ---
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const docElement = document.documentElement;
+
+    const enterIcon = `<svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-2V5h-2v5h5V7h-3z"/></svg>`;
+    const exitIcon = `<svg viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`;
+
+    function setupFullscreen() {
+        if (!document.fullscreenEnabled) {
+            fullscreenBtn.style.display = 'none';
+            return;
+        }
+        fullscreenBtn.innerHTML = enterIcon;
+
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                docElement.requestFullscreen().catch(err => {
+                    alert(`Lỗi khi vào chế độ toàn màn hình: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                fullscreenBtn.innerHTML = exitIcon;
+            } else {
+                fullscreenBtn.innerHTML = enterIcon;
+            }
+        });
+    }
+
     // --- Khởi tạo game ---
     function initGame() {
-        backgroundMusic.src = 'sounds/urban-chill-with-scratch-loop-130bpm-273349.mp3';
         correctSound.src = 'sounds/correct-6033.mp3';
         wrongSound.src = 'sounds/error-04-199275.mp3';
-
-        document.body.addEventListener('click', () => {
-            backgroundMusic.play().catch(e => console.log("Không thể phát nhạc nền tự động."));
-        }, { once: true });
 
         loadQuestion();
     }
