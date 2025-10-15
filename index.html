@@ -10,8 +10,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="fullscreen-btn">
-        <!-- Icon sẽ được thêm bằng JavaScript -->
+    <div class="header-controls">
+        <div id="auth-controls">
+            <a id="create-question-btn" href="setting-question.html" class="btn" style="display: none;">Tạo câu hỏi</a>
+            <button id="auth-btn" class="btn"></button>
+        </div>
+        <div id="fullscreen-btn">
+            <!-- Icon sẽ được thêm bằng JavaScript -->
+        </div>
     </div>
     <h1>Trò Chơi Ai Thông Minh Nhất</h1>
     <div id="game-container">
@@ -38,4 +44,15 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <script src="main.js"></script>
 </body>
+<div id="email-modal">
+    <div class="modal-content">
+        <h2>Nhập Email để chơi</h2>
+        <p>Nhập email của bạn để tải bộ câu hỏi riêng. Nếu không có, game sẽ dùng bộ câu hỏi mặc định.</p>
+        <form id="email-form">
+            <input type="email" id="email-input" placeholder="your-email@example.com" required>
+            <button type="submit" class="btn">Bắt đầu</button>
+        </form>
+        <a href="/setting-question.html" class="settings-link">Tạo/Sửa bộ câu hỏi</a>
+    </div>
+</div>
 </html>

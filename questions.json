@@ -1,0 +1,52 @@
+[
+  {
+    "type": "true_false",
+    "image": "https://media.coolmate.me/image/October2025/mceclip6_8.png",
+    "text": "Câu 1: Đây là túi thơm?",
+    "answer": true
+  },
+  {
+    "type": "true_false",
+    "image": "https://media.coolmate.me/image/October2025/mceclip3_34.png",
+    "text": "Câu 2: Đây là hoa hồng khô?",
+    "answer": true
+  },
+  {
+    "type": "image_question",
+    "text": "Câu 3: Đâu là túi vải?",
+    "answers": [
+      {
+        "image": "https://media.coolmate.me/image/October2025/mceclip4_55.png",
+        "isCorrect": false
+      },
+      {
+        "image": "https://media.coolmate.me/image/October2025/mceclip5_32.png",
+        "isCorrect": true
+      }
+    ]
+  },
+  {
+    "type": "true_false",
+    "image": "https://media.coolmate.me/image/October2025/mceclip3_34.png",
+    "text": "Câu 4: Hoa hồng khô có mùi thơm?",
+    "answer": true
+  },
+  {
+    "type": "multi_select_image",
+    "text": "Câu 5: Nguyên liệu làm túi thơm?",
+    "answers": [
+      {
+        "image": "https://media.coolmate.me/image/October2025/mceclip3_34.png",
+        "isCorrect": true
+      },
+      {
+        "image": "https://media.coolmate.me/image/October2025/mceclip4_55.png",
+        "isCorrect": false
+      },
+      {
+        "image": "https://media.coolmate.me/image/October2025/mceclip5_32.png",
+        "isCorrect": true
+      }
+    ]
+  }
+]

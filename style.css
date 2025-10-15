@@ -1,27 +1,53 @@
+.header-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#auth-controls {
+    display: flex;
+    gap: 10px;
+}
+
+#auth-controls .btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #111827; /* Gần đen */
+    color: white;
+    border: 1px solid #1f2937;
+}
+
+#auth-controls .btn:hover {
+    background-color: #374151;
+}
+
 #fullscreen-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+    position: relative;
+    top: 0;
+    right: 0;
     width: 40px;
     height: 40px;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
     border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
-    z-index: 1000;
-    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
 }
 
 #fullscreen-btn:hover {
-    transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 #fullscreen-btn svg {
     width: 24px;
     height: 24px;
-    fill: #555;
+    fill: white;
 }
 
 body {
@@ -113,8 +139,8 @@ h1 {
 }
 
 .icon-btn svg {
-    width: 40px;
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
 }
 
 .btn:hover {
@@ -206,4 +232,61 @@ h1 {
     animation: shake 0.5s !important;
     opacity: 0.5 !important;
     cursor: not-allowed !important;
+}
+
+/* Email Modal Styles */
+#email-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    display: none; /* Hidden by default */
+}
+
+#email-modal .modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    font-family: 'Baloo 2', cursive;
+}
+
+#email-modal h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+#email-modal p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+#email-modal #email-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#email-modal .settings-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+#email-modal .settings-link:hover {
+    text-decoration: underline;
 }

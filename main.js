@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- DOM Elements ---
   const questionImage = document.getElementById("question-image");
   const questionText = document.getElementById("question-text");
   const answerButtons = document.getElementById("answer-buttons");
@@ -7,96 +8,82 @@ document.addEventListener("DOMContentLoaded", () => {
   const imageAnswersContainer = document.getElementById("image-answers");
   const nextBtn = document.getElementById("next-btn");
   const questionArea = document.getElementById("question-area");
-  const gameContainer = document.getElementById("game-container"); // Thêm gameContainer
-
+  const gameContainer = document.getElementById("game-container");
+  const emailModal = document.getElementById("email-modal");
+  const emailForm = document.getElementById("email-form");
+  const emailInput = document.getElementById("email-input");
+  const fullscreenBtn = document.getElementById("fullscreen-btn");
+  const authBtn = document.getElementById("auth-btn");
+  const createQuestionBtn = document.getElementById("create-question-btn");
   const correctSound = document.getElementById("correct-sound");
   const wrongSound = document.getElementById("wrong-sound");
 
-  const questions = [
-    {
-      type: "true_false",
-      image: "https://media.coolmate.me/image/October2025/mceclip6_8.png",
-      text: "Câu 1: Đây là túi thơm?",
-      answer: true,
-    },
-    {
-      type: "true_false",
-      image: "https://media.coolmate.me/image/October2025/mceclip3_34.png",
-      text: "Câu 2: Đây là hoa hồng khô?",
-      answer: true,
-    },
-    {
-      type: "image_question",
-      text: "Câu 3: Đâu là túi vải?",
-      answers: [
-        {
-          image: "https://media.coolmate.me/image/October2025/mceclip4_55.png",
-          isCorrect: false,
-        },
-        {
-          image: "https://media.coolmate.me/image/October2025/mceclip5_32.png",
-          isCorrect: true,
-        },
-      ],
-    },
-    {
-      type: "true_false",
-      image: "https://media.coolmate.me/image/October2025/mceclip3_34.png",
-      text: "Câu 4: Hoa hồng khô có mùi thơm?",
-      answer: true,
-    },
-    {
-      type: "multi_select_image",
-      text: "Câu 5: Nguyên liệu làm túi thơm?",
-      answers: [
-        {
-          image: "https://media.coolmate.me/image/October2025/mceclip3_34.png",
-          isCorrect: true,
-        },
-        {
-          image: "https://media.coolmate.me/image/October2025/mceclip4_55.png",
-          isCorrect: false,
-        },
-        {
-          image: "https://media.coolmate.me/image/October2025/mceclip5_32.png",
-          isCorrect: true,
-        },
-      ],
-    },
-  ];
-
+  // --- Game State ---
+  let questions = [];
   let currentQuestionIndex = 0;
   let canAnswer = true;
+
+  // --- Core Functions ---
+  async function getQuestionSet(email) {
+    try {
+      const res = await fetch(`/api/questions?email=${encodeURIComponent(email)}`);
+      if (res.status === 404) {
+        console.log("No custom question set found for this email.");
+        return null; // Explicitly return null for not found
+      }
+      if (!res.ok) {
+        throw new Error(`API fetch failed with status ${res.status}`);
+      }
+      const data = await res.json();
+      return data.questions;
+    } catch (error) {
+      console.error("Error fetching question set:", error);
+      return null;
+    }
+  }
+
+  async function loadDefaultQuestions() {
+    try {
+      const response = await fetch("questions.json");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error("Could not load default questions:", error);
+      return null;
+    }
+  }
+
+  function startGame(questionSet) {
+    if (!questionSet || questionSet.length === 0) {
+      questionArea.innerHTML = `<p style="color: red;">Lỗi: Không tìm thấy bộ câu hỏi. Vui lòng vào trang cài đặt để tạo một bộ câu hỏi mới hoặc kiểm tra lại email.</p>`;
+      return;
+    }
+    questions = questionSet;
+    emailModal.style.display = "none";
+    gameContainer.style.display = "block";
+    loadQuestion();
+  }
 
   function loadQuestion() {
     canAnswer = true;
     const question = questions[currentQuestionIndex];
 
-    // Thay đổi kích thước container cho câu hỏi trắc nghiệm
-    if (question.type === "multi_select_image") {
-      gameContainer.style.maxWidth = "750px";
-    } else {
-      gameContainer.style.maxWidth = "500px";
-    }
+    gameContainer.style.maxWidth = question.type === "multi_select_image" ? "750px" : "500px";
 
-    // Reset chung
     nextBtn.style.display = "none";
     nextBtn.textContent = "Câu tiếp theo";
     imageAnswersContainer.innerHTML = "";
 
-    questionImage.style.display =
-      question.type === "true_false" ? "block" : "none";
-    answerButtons.style.display =
-      question.type === "true_false" ? "flex" : "none";
-    imageAnswersContainer.style.display = question.type.includes("image")
-      ? "flex"
-      : "none";
+    questionImage.style.display = question.type === "true_false" ? "block" : "none";
+    answerButtons.style.display = question.type === "true_false" ? "flex" : "none";
+    imageAnswersContainer.style.display = question.type.includes("image") ? "flex" : "none";
 
     questionText.textContent = question.text;
+
     if (question.type === "true_false") {
       questionImage.src = question.image;
       [trueBtn, falseBtn].forEach((btn) => {
-        btn.classList.remove("correct", "wrong");
+        btn.className = 'btn icon-btn'; // Reset classes
         btn.disabled = false;
         btn.style.pointerEvents = "auto";
         btn.style.visibility = "visible";
@@ -108,17 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.src = answer.image;
         img.classList.add("image-answer");
         img.dataset.isCorrect = answer.isCorrect;
-
-        Object.assign(img.style, {
-          display: "",
-          transform: "scale(1)",
-          opacity: "1",
-          width: "",
-          margin: "",
-          borderWidth: "",
-        });
         img.style.animation = `fade-in-up 0.5s ${index * 0.1}s ease-out both`;
-
         img.addEventListener("click", () => handleImageClick(img, question));
         imageAnswersContainer.appendChild(img);
       });
@@ -136,8 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
       correctSound.play();
       confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
       nextBtn.style.display = "block";
-      if (currentQuestionIndex === questions.length - 1)
-        nextBtn.textContent = "Kết thúc";
+      if (currentQuestionIndex === questions.length - 1) nextBtn.textContent = "Kết thúc";
 
       clickedElement.classList.add("correct");
       const otherBtn = clickedElement === trueBtn ? falseBtn : trueBtn;
@@ -153,11 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleImageClick(clickedImg, question) {
-    if (
-      clickedImg.classList.contains("correct") ||
-      clickedImg.classList.contains("wrong")
-    )
-      return;
+    if (clickedImg.classList.contains("correct") || clickedImg.classList.contains("wrong")) return;
     if (question.type === "multi_select_image" && !canAnswer) return;
 
     const isCorrect = clickedImg.dataset.isCorrect === "true";
@@ -169,21 +141,14 @@ document.addEventListener("DOMContentLoaded", () => {
         correctSound.play();
         confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
         nextBtn.style.display = "block";
-        if (currentQuestionIndex === questions.length - 1)
-          nextBtn.textContent = "Kết thúc";
+        if (currentQuestionIndex === questions.length - 1) nextBtn.textContent = "Kết thúc";
 
         Array.from(imageAnswersContainer.children).forEach((img) => {
           img.style.pointerEvents = "none";
           if (img.dataset.isCorrect === "true") {
             img.classList.add("correct");
           } else {
-            Object.assign(img.style, {
-              transform: "scale(0)",
-              opacity: "0",
-              width: "0px",
-              margin: "0",
-              borderWidth: "0px",
-            });
+            Object.assign(img.style, { transform: "scale(0)", opacity: "0", width: "0px", margin: "0", borderWidth: "0px" });
           }
         });
       } else {
@@ -194,12 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (question.type === "multi_select_image") {
       if (isCorrect) {
         correctSound.play();
-        confetti({
-          particleCount: 50,
-          spread: 70,
-          origin: { y: 0.6 },
-          scalar: 0.8,
-        });
+        confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 }, scalar: 0.8 });
         clickedImg.classList.add("correct");
       } else {
         wrongSound.play();
@@ -212,32 +172,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function checkMultiSelectCompletion(question) {
     const allAnswerElements = Array.from(imageAnswersContainer.children);
-    const totalCorrectAnswers = question.answers.filter(
-      (a) => a.isCorrect
-    ).length;
-    const selectedCorrectAnswers = allAnswerElements.filter((img) =>
-      img.classList.contains("correct")
-    ).length;
+    const totalCorrectAnswers = question.answers.filter((a) => a.isCorrect).length;
+    const selectedCorrectAnswers = allAnswerElements.filter((img) => img.classList.contains("correct")).length;
 
     if (selectedCorrectAnswers === totalCorrectAnswers) {
       canAnswer = false;
       setTimeout(() => {
         confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
+        nextBtn.style.display = "block";
+        if (currentQuestionIndex === questions.length - 1) nextBtn.textContent = "Kết thúc";
       }, 100);
-      nextBtn.style.display = "block";
-      if (currentQuestionIndex === questions.length - 1)
-        nextBtn.textContent = "Kết thúc";
 
       allAnswerElements.forEach((img) => {
-        // Ẩn tất cả các đáp án không phải là đáp án đúng
         if (!img.classList.contains("correct")) {
-          Object.assign(img.style, {
-            transform: "scale(0)",
-            opacity: "0",
-            width: "0px",
-            margin: "0",
-            borderWidth: "0px",
-          });
+          Object.assign(img.style, { transform: "scale(0)", opacity: "0", width: "0px", margin: "0", borderWidth: "0px" });
         }
       });
     }
@@ -246,11 +194,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function nextQuestion() {
     currentQuestionIndex++;
     if (currentQuestionIndex >= questions.length) {
-      questionArea.innerHTML = `<h2>Chúc mừng!</h2><p>Bạn đã hoàn thành tất cả các câu hỏi.</p>`;
+      questionArea.innerHTML = `<h2>Chúc mừng!</h2><p>Bạn đã hoàn thành tất cả các câu hỏi.</p><button class="btn" onclick="location.reload()">Chơi lại</button>`;
       nextBtn.style.display = "none";
       answerButtons.style.display = "none";
       imageAnswersContainer.style.display = "none";
-      gameContainer.style.maxWidth = "500px"; // Reset lại khi kết thúc
+      gameContainer.style.maxWidth = "500px";
       return;
     }
 
@@ -261,23 +209,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
   }
 
-  // --- Event Listeners ---
-  trueBtn.addEventListener("click", () =>
-    handleTrueFalseAnswer(questions[currentQuestionIndex].answer, trueBtn)
-  );
-  falseBtn.addEventListener("click", () =>
-    handleTrueFalseAnswer(!questions[currentQuestionIndex].answer, falseBtn)
-  );
-  nextBtn.addEventListener("click", nextQuestion);
-
-  // --- Logic Toàn màn hình ---
-  const fullscreenBtn = document.getElementById("fullscreen-btn");
-  const docElement = document.documentElement;
-
-  const enterIcon = `<svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-2V5h-2v5h5V7h-3z"/></svg>`;
-  const exitIcon = `<svg viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`;
-
   function setupFullscreen() {
+    const docElement = document.documentElement;
+    const enterIcon = `<svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 2h-2v3h-3v2h5v-5zm-3-2V5h-2v5h5V7h-3z"/></svg>`;
+    const exitIcon = `<svg viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>`;
+
     if (!document.fullscreenEnabled) {
       fullscreenBtn.style.display = "none";
       return;
@@ -287,9 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fullscreenBtn.addEventListener("click", () => {
       if (!document.fullscreenElement) {
         docElement.requestFullscreen().catch((err) => {
-          alert(
-            `Lỗi khi vào chế độ toàn màn hình: ${err.message} (${err.name})`
-          );
+          alert(`Lỗi khi vào chế độ toàn màn hình: ${err.message} (${err.name})`);
         });
       } else {
         document.exitFullscreen();
@@ -297,21 +231,75 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement) {
-        fullscreenBtn.innerHTML = exitIcon;
-      } else {
-        fullscreenBtn.innerHTML = enterIcon;
-      }
+      fullscreenBtn.innerHTML = document.fullscreenElement ? exitIcon : enterIcon;
     });
   }
 
-  // --- Khởi tạo game ---
-  function initGame() {
+  function updateAuthUI(isLoggedIn) {
+    if (isLoggedIn) {
+      authBtn.textContent = "Đăng xuất";
+      createQuestionBtn.style.display = "block";
+      authBtn.onclick = () => {
+        localStorage.removeItem("miniGameEmail");
+        location.reload();
+      };
+    } else {
+      authBtn.textContent = "Đăng nhập";
+      createQuestionBtn.style.display = "none";
+      authBtn.onclick = () => {
+        emailModal.style.display = "flex";
+        gameContainer.style.display = "none";
+      };
+    }
+  }
+
+  async function initGame() {
     setupFullscreen();
     correctSound.src = "sounds/correct-6033.mp3";
     wrongSound.src = "sounds/error-04-199275.mp3";
-    loadQuestion();
+
+    const savedEmail = localStorage.getItem("miniGameEmail");
+    updateAuthUI(!!savedEmail);
+
+    if (savedEmail) {
+      let questionSet = await getQuestionSet(savedEmail);
+      if (!questionSet) {
+        questionSet = await loadDefaultQuestions();
+      }
+      startGame(questionSet);
+    } else {
+      emailModal.style.display = "flex";
+      gameContainer.style.display = "none";
+    }
   }
 
+  // --- Event Listeners ---
+  emailForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    if (!email) return;
+    localStorage.setItem("miniGameEmail", email);
+
+    const loadingMessage = document.createElement('p');
+    loadingMessage.textContent = 'Đang tìm bộ câu hỏi của bạn...';
+    emailForm.appendChild(loadingMessage);
+
+    let questionSet = await getQuestionSet(email);
+
+    if (!questionSet) {
+      loadingMessage.textContent = 'Không tìm thấy, đang tải bộ câu hỏi mặc định...';
+      questionSet = await loadDefaultQuestions();
+    }
+
+    loadingMessage.remove();
+    updateAuthUI(true);
+    startGame(questionSet);
+  });
+  
+  trueBtn.addEventListener("click", () => handleTrueFalseAnswer(questions[currentQuestionIndex].answer, trueBtn));
+  falseBtn.addEventListener("click", () => handleTrueFalseAnswer(!questions[currentQuestionIndex].answer, falseBtn));
+  nextBtn.addEventListener("click", nextQuestion);
+
+  // --- Start Everything ---
   initGame();
 });
