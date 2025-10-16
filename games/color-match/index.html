@@ -14,19 +14,72 @@
   <a href="/" class="back-link">&larr; Quay về</a>
   <div id="fullscreen-btn"></div>
   <div class="wrap">
-    <header>
-      <h1>🎯 Chạm đúng màu</h1>
-    </header>
-    <section class="screen active">
-      <div class="toolbar">
-        <div class="label">Chạm vào màu đang tìm:</div>
-        <div id="target" class="target"><span class="dot"></span><span id="targetName">Đỏ</span></div>
-        <span class="pill">Phân biệt màu · Chú ý</span>
+    <!-- Start Screen -->
+    <section id="start-screen" class="screen active">
+      <header>
+        <h1>🎯 Chạm đúng màu</h1>
+      </header>
+      <div class="card start-card">
+        <h2>Nhập tên của bạn</h2>
+        <form id="start-form">
+          <input type="text" id="player-name" placeholder="Tên người chơi..." required maxlength="15">
+          <button type="submit" class="btn">Bắt đầu</button>
+        </form>
+        <div id="leaderboard-preview"></div>
       </div>
-      <div class="color-grid" id="colorGrid"></div>
-      <div id="confetti" class="confetti" aria-hidden="true"></div>
+      <button id="settings-btn" class="btn-icon" aria-label="Cài đặt">⚙️</button>
+    </section>
+
+    <!-- Game Screen -->
+    <section id="game-screen" class="screen">
+        <div class="game-header">
+          <div id="score" class="pill">Điểm: 0</div>
+          <div class="timer-bar">
+            <div id="timer-fill"></div>
+          </div>
+          <div id="lives" class="pill">❤️❤️❤️</div>
+        </div>
+        <div class="toolbar">
+            <div class="label">Chạm vào màu:</div>
+            <div id="target" class="target"><span class="dot"></span><span id="targetName">Đỏ</span></div>
+        </div>
+        <div class="color-grid" id="colorGrid"></div>
+        <div id="confetti" class="confetti" aria-hidden="true"></div>
+    </section>
+
+    <!-- Game Over Screen -->
+    <section id="game-over-screen" class="screen">
+        <div class="card game-over-card">
+            <h2>Kết thúc!</h2>
+            <p>Điểm cuối cùng của bạn: <b id="final-score">0</b></p>
+            <div id="leaderboard-final"></div>
+            <button id="restart-btn" class="btn">Chơi lại</button>
+        </div>
     </section>
   </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal-overlay hidden">
+    <div class="modal-content card">
+      <h2>Cài đặt</h2>
+      <form id="settings-form">
+        <div class="form-group">
+          <label for="timer-enabled">Bật đếm ngược thời gian</label>
+          <input type="checkbox" id="timer-enabled">
+        </div>
+        <div class="form-group">
+          <label for="timer-duration">Thời gian mỗi câu (giây)</label>
+          <input type="number" id="timer-duration" min="1" max="30" value="5">
+        </div>
+        <div class="form-group">
+          <label for="lives-count">Số mạng</label>
+          <input type="number" id="lives-count" min="1" max="10" value="1">
+        </div>
+        <button type="submit" class="btn">Lưu & Đóng</button>
+      </form>
+    </div>
+  </div>
+
   <div id="toast" class="toast" role="status" aria-live="polite">Giỏi lắm! 👏</div>
   <script src="script.js"></script>
 </body>
