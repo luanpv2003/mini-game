@@ -38,12 +38,10 @@ export default async function handler(request, response) {
 
   if (request.method === 'GET') {
     try {
-      // Retrieve the data from Vercel KV
       const data = await kv.get(key);
       if (data) {
         return response.status(200).json(data);
       } else {
-        // Return 404 if no data is found for the email
         return response.status(404).json({ message: 'No question set found for this email.' });
       }
     } catch (error) {

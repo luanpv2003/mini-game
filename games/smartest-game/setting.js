@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchDefaultQuestions() {
         try {
-            const res = await fetch('/questions.json');
+            const res = await fetch('questions.json');
             if (!res.ok) throw new Error('Không thể tải file questions.json mặc định.');
             return await res.json();
         } catch (error) {
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('miniGameEmail');
-        window.location.href = '/';
+        window.location.href = '../../';
     });
 
     // --- Auto-login and Initialization ---

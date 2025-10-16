@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trò Chơi Ai Thông Minh Nhất</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="/" class="back-link">&larr; Quay về</a>
+    <div class="header-controls">
+        <div id="auth-controls">
+            <a id="create-question-btn" href="setting-question.html" class="btn" style="display: none;">Tạo câu hỏi</a>
+            <button id="auth-btn" class="btn"></button>
+        </div>
+        <div id="fullscreen-btn">
+            <!-- Icon sẽ được thêm bằng JavaScript -->
+        </div>
+    </div>
+    <h1>Trò Chơi Ai Thông Minh Nhất</h1>
+    <div id="game-container">
+        <div id="question-area" class="active">
+            <img id="question-image" src="" alt="Hình ảnh câu hỏi">
+            <p id="question-text"></p>
+        </div>
+        <div id="answer-buttons">
+            <button class="btn icon-btn" id="true-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+            </button>
+            <button class="btn icon-btn" id="false-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+            </button>
+        </div>
+        <div id="image-answers"></div>
+        <button class="btn" id="next-btn" style="display: none;">Câu tiếp theo</button>
+    </div>
+
+    <!-- Audio files -->
+    <audio id="correct-sound"></audio>
+    <audio id="wrong-sound"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <script src="main.js"></script>
+</body>
+<div id="email-modal">
+    <div class="modal-content">
+        <h2>Nhập Email để chơi</h2>
+        <p>Nhập email của bạn để tải bộ câu hỏi riêng. Nếu không có, game sẽ dùng bộ câu hỏi mặc định.</p>
+        <form id="email-form">
+            <input type="email" id="email-input" placeholder="your-email@example.com" required>
+            <button type="submit" class="btn">Bắt đầu</button>
+        </form>
+    </div>
+</div>
+</html>

@@ -1,0 +1,22 @@
+.pad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 8px;
+}
+.pad {
+  height: clamp(90px, 20vw, 180px);
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  transition: transform 0.08s ease;
+}
+.pad:active {
+  transform: scale(0.98);
+}

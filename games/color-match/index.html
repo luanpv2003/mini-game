@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trò chơi: Chạm đúng màu</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="/" class="back-link">&larr; Quay về</a>
+  <div id="fullscreen-btn"></div>
+  <div class="wrap">
+    <header>
+      <h1>🎯 Chạm đúng màu</h1>
+    </header>
+    <section class="screen active">
+      <div class="toolbar">
+        <div class="label">Chạm vào màu đang tìm:</div>
+        <div id="target" class="target"><span class="dot"></span><span id="targetName">Đỏ</span></div>
+        <span class="pill">Phân biệt màu · Chú ý</span>
+      </div>
+      <div class="color-grid" id="colorGrid"></div>
+      <div id="confetti" class="confetti" aria-hidden="true"></div>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite">Giỏi lắm! 👏</div>
+  <script src="script.js"></script>
+</body>
+</html>
