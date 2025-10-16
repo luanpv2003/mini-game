@@ -1,0 +1,134 @@
+:root {
+    --blue: #3b82f6;
+    --sky: #e0f2fe;
+    --sea: #0ea5e9;
+    --ink: #0f172a;
+    --ui: #ffffffee;
+    --accent: #22c55e;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: 'Baloo 2', cursive;
+    background: linear-gradient(#e0f2fe, #bfdbfe) !important;
+}
+
+.wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(20px, 4vw, 32px);
+    color: #0b3a6d;
+}
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.pill {
+    background: var(--ui);
+    padding: 8px 12px;
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+    font-weight: 700;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn {
+    border: 0;
+    border-radius: 14px;
+    padding: 10px 14px;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
+    transition: transform .08s;
+}
+
+.btn:active {
+    transform: scale(.98);
+}
+
+.lake {
+    position: relative;
+    flex: 1;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .12);
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #7dd3fc 0%, #38bdf8 40%, #0ea5e9 100%);
+}
+
+.tip {
+    opacity: .8;
+    font-size: 14px;
+    text-align: center;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+}
+
+.start {
+    pointer-events: auto;
+    display: grid;
+    gap: 10px;
+    place-items: center;
+}
+
+.title {
+    font-size: clamp(22px, 5vw, 40px);
+    font-weight: 900;
+    color: #083344;
+    text-shadow: 0 2px 0 #fff7;
+}
+
+.card {
+    background: #ffffffee;
+    padding: 18px 20px;
+    border-radius: 20px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .18);
+    text-align: center;
+}
+.start{pointer-events:auto;display:grid;gap:10px;place-items:center}
+.title{font-size:clamp(22px,5vw,40px);font-weight:900;color:#083344;text-shadow:0 2px 0 #fff7}
+.card{background:#ffffffee;padding:18px 20px;border-radius:20px;box-shadow:0 16px 36px rgba(0,0,0,.18);text-align:center}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bắt Cá – Trò chơi cho bé 1–2 tuổi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="/" class="back-link">&larr; Quay về</a>
+  <div class="wrap">
+    <header>
+      <h1>🐟 Bắt Cá</h1>
+      <div class="toolbar">
+        <div class="pill" id="score">Điểm: <b>0</b></div>
+        <div class="pill" id="caught">Cá bắt: <b>0</b></div>
+        <button class="btn" id="btnRestart">Chơi lại</button>
+        <button class="btn" id="btnFS">Toàn màn hình</button>
+      </div>
+    </header>
+    <div class="tip">Mẹo: cho bé nhấn vào cá đang bơi để bắt. Mỗi lần bắt sẽ có âm thanh và gợn nước ✨</div>
+
+    <div class="lake">
+      <canvas id="c"></canvas>
+      <div class="overlay">
+        <div id="startPanel" class="start card">
+          <div class="title">Chạm để bắt đầu!</div>
+          <div>Nhấn/Chạm vào cá để bắt. Dành cho bé 1–2 tuổi, thao tác đơn giản.</div>
+          <button class="btn" id="btnStart">Bắt đầu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
