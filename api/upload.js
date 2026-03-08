@@ -26,9 +26,11 @@ export default async function handler(request, response) {
         const form = formidable({});
         const [fields, files] = await form.parse(request);
 
-        const imageFile = files.file?.[0];
+        // Lấy file từ files[] field
+        const imageFile = files['files[]']?.[0];
 
         if (!imageFile) {
+            console.error('No file found. Received files:', Object.keys(files));
             return response.status(400).json({ error: 'No file uploaded.' });
         }
 
