@@ -38,7 +38,21 @@ export default async function handler(request, response) {
         const coolmateResponse = await fetch('https://media.coolmate.me/api/upload', {
             method: 'POST',
             body: coolmateFormData,
-            headers: coolmateFormData.getHeaders(),
+            headers: {
+                ...coolmateFormData.getHeaders(),
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Connection': 'keep-alive',
+                'Origin': 'https://admin.coolmate.me',
+                'Referer': 'https://admin.coolmate.me/',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-site',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
+                'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"macOS"',
+            },
         });
 
         if (!coolmateResponse.ok) {
