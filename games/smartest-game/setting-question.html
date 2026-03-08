@@ -176,10 +176,17 @@
         }
 
         .footer-actions {
+            position: sticky;
+            top: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 2rem;
+            padding: 1rem 2rem;
+            margin: 0 -1.5rem 1.5rem -1.5rem;
+            background-color: white;
+            border-bottom: 2px solid var(--gray-200);
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .home-link {
@@ -243,11 +250,11 @@
         </header>
 
         <main id="editor-container" style="display: none;">
-            <div id="questions-list"></div>
             <div class="footer-actions">
                 <button class="btn btn-secondary" id="add-question-btn">+ Thêm câu hỏi</button>
                 <button class="btn" id="save-questions-btn">Lưu thay đổi</button>
             </div>
+            <div id="questions-list"></div>
             <div id="status-message"></div>
         </main>
 

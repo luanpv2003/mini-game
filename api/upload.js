@@ -1,13 +1,59 @@
-import { formidable } from 'formidable';
 import fetch from 'node-fetch';
 import FormData from 'form-data';
-import fs from 'fs';
+import { Readable } from 'stream';
 
 export const config = {
     api: {
         bodyParser: false,
     },
 };
+
+// Helper để parse multipart form data
+async function parseMultipartForm(req) {
+    const boundary = req.headers['content-type']?.split('boundary=')[1];
+    if (!boundary) throw new Error('No boundary found');
+
+    const chunks = [];
+    for await (const chunk of req) {
+        chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+
+    // Tìm file trong multipart data
+    const boundaryBuffer = Buffer.from(`--${boundary}`);
+    const parts = [];
+    let start = 0;
+
+    while (true) {
+        const boundaryIndex = buffer.indexOf(boundaryBuffer, start);
+        if (boundaryIndex === -1) break;
+
+        const nextBoundary = buffer.indexOf(boundaryBuffer, boundaryIndex + boundaryBuffer.length);
+        if (nextBoundary === -1) break;
+
+        const part = buffer.slice(boundaryIndex + boundaryBuffer.length, nextBoundary);
+        parts.push(part);
+        start = nextBoundary;
+    }
+
+    for (const part of parts) {
+        const headerEnd = part.indexOf('\r\n\r\n');
+        if (headerEnd === -1) continue;
+
+        const headers = part.slice(0, headerEnd).toString();
+        const filenameMatch = headers.match(/filename="([^"]+)"/);
+        
+        if (filenameMatch) {
+            const fileData = part.slice(headerEnd + 4, part.length - 2); // Loại bỏ \r\n cuối
+            return {
+                filename: filenameMatch[1],
+                buffer: fileData
+            };
+        }
+    }
+
+    throw new Error('No file found in request');
+}
 
 export default async function handler(request, response) {
     response.setHeader('Access-Control-Allow-Origin', '*');
@@ -23,19 +69,12 @@ export default async function handler(request, response) {
     }
 
     try {
-        const form = formidable({});
-        const [fields, files] = await form.parse(request);
+        const { filename, buffer } = await parseMultipartForm(request);
 
-        // Lấy file từ files[] field
-        const imageFile = files['files[]']?.[0];
-
-        if (!imageFile) {
-            console.error('No file found. Received files:', Object.keys(files));
-            return response.status(400).json({ error: 'No file uploaded.' });
-        }
-
+        // Tạo FormData để gửi đến Coolmate API
         const coolmateFormData = new FormData();
-        coolmateFormData.append('files[]', fs.createReadStream(imageFile.filepath), imageFile.originalFilename);
+        const stream = Readable.from(buffer);
+        coolmateFormData.append('files[]', stream, filename);
 
         const coolmateResponse = await fetch('https://media.coolmate.me/api/upload', {
             method: 'POST',
@@ -51,9 +90,6 @@ export default async function handler(request, response) {
                 'Sec-Fetch-Mode': 'cors',
                 'Sec-Fetch-Site': 'same-site',
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36',
-                'sec-ch-ua': '"Google Chrome";v="137", "Chromium";v="137", "Not/A)Brand";v="24"',
-                'sec-ch-ua-mobile': '?0',
-                'sec-ch-ua-platform': '"macOS"',
             },
         });
 
@@ -73,6 +109,6 @@ export default async function handler(request, response) {
         }
     } catch (error) {
         console.error('Upload handler error:', error);
-        return response.status(500).json({ error: 'Internal Server Error' });
+        return response.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
 }
