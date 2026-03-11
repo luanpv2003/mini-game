@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -10,6 +11,7 @@
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <a href="/" class="back-link">&larr; Quay về</a>
   <div class="wrap">
@@ -32,10 +34,16 @@
           <div>Nhấn/Chạm vào cá để bắt. Dành cho bé 1–2 tuổi, thao tác đơn giản.</div>
           <button class="btn" id="btnStart">Bắt đầu</button>
         </div>
+        <div id="gameOverPanel" class="start card" style="display: none;">
+          <div class="title">Hết giờ rồi! 💥</div>
+          <div id="finalScore">Bạn đã đạt được <b>0</b> điểm!</div>
+          <button class="btn" id="btnRestartFinal">Chơi lại thôi</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
+
 </html>
