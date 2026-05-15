@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     answerButtons.style.display = question.type === "true_false" ? "flex" : "none";
     imageAnswersContainer.style.display = question.type.includes("image") ? "flex" : "none";
 
-    questionText.textContent = question.text;
+    questionText.textContent = `Câu ${currentQuestionIndex + 1}: ${question.text}`;
 
     if (question.type === "true_false") {
       questionImage.src = question.image;
