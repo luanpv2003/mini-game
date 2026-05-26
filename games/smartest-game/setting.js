@@ -103,6 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = '';
 
         if (type === 'true_false') {
+            const opt0 = questionData.options?.[0] || '';
+            const opt1 = questionData.options?.[1] || '';
+            const bothFilled = opt0.trim() !== '' && opt1.trim() !== '';
+            const answerVal = typeof questionData.answer === 'number' ? questionData.answer : (questionData.answer === true ? 0 : 1);
             container.innerHTML = `
                 <div class="field-group">
                     <label>Link ảnh:</label>
@@ -114,10 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="field-group">
+                    <label>Các lựa chọn (hiển thị trên nút):</label>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <input type="text" class="option-input option-0" placeholder="Lựa chọn 1" value="${opt0.replace(/"/g, '&quot;')}">
+                        <input type="text" class="option-input option-1" placeholder="Lựa chọn 2" value="${opt1.replace(/"/g, '&quot;')}">
+                    </div>
+                </div>
+                <div class="field-group answer-select-group" style="${bothFilled ? '' : 'display:none'}">
                     <label>Đáp án đúng là:</label>
                     <select class="question-answer">
-                        <option value="true" ${questionData.answer === true ? 'selected' : ''}>Đúng</option>
-                        <option value="false" ${questionData.answer === false ? 'selected' : ''}>Sai</option>
+                        <option value="0" ${answerVal === 0 ? 'selected' : ''}>Lựa chọn 1: ${opt0}</option>
+                        <option value="1" ${answerVal === 1 ? 'selected' : ''}>Lựa chọn 2: ${opt1}</option>
                     </select>
                 </div>
             `;
@@ -165,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     addQuestionBtn.addEventListener('click', () => {
-        currentQuestions.push({ type: 'true_false', text: 'Câu hỏi mới?', answer: true, image: '' });
+        currentQuestions.push({ type: 'true_false', text: 'Câu hỏi mới?', options: ['', ''], answer: 0, image: '' });
         renderQuestions();
     });
 
@@ -180,7 +191,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (type === 'true_false') {
                 question.image = el.querySelector('.question-image').value;
-                question.answer = el.querySelector('.question-answer').value === 'true';
+                question.options = [
+                    el.querySelector('.option-0')?.value || '',
+                    el.querySelector('.option-1')?.value || '',
+                ];
+                const answerEl = el.querySelector('.question-answer');
+                question.answer = answerEl ? parseInt(answerEl.value) : 0;
             } else {
                 question.answers = [];
                 el.querySelectorAll('.answer').forEach(ansEl => {
@@ -199,6 +215,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     questionsList.addEventListener('input', (e) => {
+        if (e.target.classList.contains('option-input')) {
+            const questionEditor = e.target.closest('.question-editor');
+            const opt0 = questionEditor.querySelector('.option-0').value.trim();
+            const opt1 = questionEditor.querySelector('.option-1').value.trim();
+            const answerGroup = questionEditor.querySelector('.answer-select-group');
+            const answerSelect = questionEditor.querySelector('.question-answer');
+            if (opt0 && opt1) {
+                answerGroup.style.display = '';
+                answerSelect.options[0].text = `Lựa chọn 1: ${opt0}`;
+                answerSelect.options[1].text = `Lựa chọn 2: ${opt1}`;
+            } else {
+                answerGroup.style.display = 'none';
+            }
+        }
+
         if (e.target.matches('input[type="text"]') && e.target.closest('.image-input-group')) {
             const group = e.target.closest('.image-input-group');
             const url = e.target.value;
@@ -301,7 +332,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const newQuestionData = { type: newType, text: currentQuestions[index].text };
 
             if (newType === 'true_false') {
-                newQuestionData.answer = true;
+                newQuestionData.options = ['', ''];
+                newQuestionData.answer = 0;
                 newQuestionData.image = '';
             } else {
                 newQuestionData.answers = [{ image: '', isCorrect: true }];

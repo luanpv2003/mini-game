@@ -81,9 +81,13 @@ document.addEventListener("DOMContentLoaded", () => {
     questionText.textContent = `Câu ${currentQuestionIndex + 1}: ${question.text}`;
 
     if (question.type === "true_false") {
-      questionImage.src = question.image;
+      questionImage.src = question.image || '';
+      const hasTextOptions = question.options?.[0] && question.options?.[1];
+      trueBtn.textContent = hasTextOptions ? question.options[0] : '😊';
+      falseBtn.textContent = hasTextOptions ? question.options[1] : '☹️';
       [trueBtn, falseBtn].forEach((btn) => {
-        btn.className = 'btn icon-btn'; // Reset classes
+        btn.className = hasTextOptions ? 'btn' : 'btn icon-btn';
+        btn.style.color = hasTextOptions ? 'black' : '';
         btn.disabled = false;
         btn.style.pointerEvents = "auto";
         btn.style.visibility = "visible";
@@ -296,8 +300,16 @@ document.addEventListener("DOMContentLoaded", () => {
     startGame(questionSet);
   });
   
-  trueBtn.addEventListener("click", () => handleTrueFalseAnswer(questions[currentQuestionIndex].answer, trueBtn));
-  falseBtn.addEventListener("click", () => handleTrueFalseAnswer(!questions[currentQuestionIndex].answer, falseBtn));
+  trueBtn.addEventListener("click", () => {
+    const q = questions[currentQuestionIndex];
+    const isCorrect = typeof q.answer === 'boolean' ? q.answer === true : q.answer === 0;
+    handleTrueFalseAnswer(isCorrect, trueBtn);
+  });
+  falseBtn.addEventListener("click", () => {
+    const q = questions[currentQuestionIndex];
+    const isCorrect = typeof q.answer === 'boolean' ? q.answer === false : q.answer === 1;
+    handleTrueFalseAnswer(isCorrect, falseBtn);
+  });
   nextBtn.addEventListener("click", nextQuestion);
 
   // --- Start Everything ---
