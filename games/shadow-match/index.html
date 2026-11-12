@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tìm Bóng Con Vật - Mini Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="/" class="back-link">&larr; Trang chủ</a>
+  <div id="fullscreen-btn"></div>
+
+  <div class="wrap game-wrapper">
+    <header>
+      <h1>🐾 Tìm Bóng Con Vật</h1>
+      <div class="stars-bar" id="stars-bar">
+        <!-- Ngôi sao bé sưu tầm -->
+        <span class="star-icon">⭐</span>
+        <span class="stars-count" id="stars-count">0</span>
+        <span class="stars-label">ngôi sao bé ngoan</span>
+      </div>
+    </header>
+
+    <main class="game-stage">
+      <!-- Lời gợi ý vui nhộn -->
+      <div class="hint-bubble" id="hint-bubble">
+        <span id="hint-text">Bóng của bạn nào đây nhỉ?</span>
+      </div>
+
+      <!-- Khu vực hiển thị Cái Bóng Bí Ẩn -->
+      <div class="shadow-stage" id="shadow-stage">
+        <div class="magic-glow" id="magic-glow"></div>
+        <div class="shadow-card" id="shadow-card">
+          <div class="mystery-badge" id="mystery-badge">?</div>
+          <div class="animal-figure silhouette" id="shadow-animal">🐘</div>
+        </div>
+        <div class="revealed-name" id="revealed-name">???</div>
+      </div>
+
+      <!-- Canvas hạt pháo hoa lấp lánh -->
+      <canvas id="fx-canvas"></canvas>
+
+      <!-- 3 lựa chọn con vật -->
+      <div class="choices-container">
+        <div class="choices-title">👇 Chạm vào bạn thú có hình giống chiếc bóng nhé:</div>
+        <div class="choices-grid" id="choices-grid">
+          <!-- Các nút con vật được tạo bằng JS -->
+        </div>
+      </div>
+
+      <!-- Nút điều khiển -->
+      <div class="controls-bar">
+        <button class="btn btn-secondary" id="btn-next">
+          <span>Đổi bóng khác</span> 🔄
+        </button>
+        <button class="btn btn-secondary" id="btn-sound">
+          <span id="sound-label">Âm thanh: Bật 🔊</span>
+        </button>
+      </div>
+
+      <!-- Hướng dẫn điều khiển TV -->
+      <div class="tv-bar-hint">
+        <span>📺 Remote TV: Phím <b>1, 2, 3</b> để chọn nhanh con vật</span>
+        <span>Mũi tên ⬅️ ➡️ và <b>OK</b> để so khớp bóng</span>
+        <span>Phím <b>Back / Esc</b> để về Trang chủ</span>
+      </div>
+    </main>
+
+    <!-- Thông báo ngắn -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

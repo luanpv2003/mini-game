@@ -7,73 +7,169 @@
     <title>Tuyển tập Mini Game</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+            outline: none;
+        }
+
         body {
-            font-family: 'Baloo 2', cursive;
+            font-family: 'Baloo 2', cursive, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f8ff;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef3c7 100%);
             margin: 0;
+            padding: clamp(16px, 3vw, 40px);
         }
 
         .container {
             text-align: center;
-            background: white;
-            padding: 40px 60px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            padding: clamp(24px, 4vw, 50px);
+            border-radius: 28px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+            width: min(96vw, 1420px);
+            margin: auto;
         }
 
         h1 {
-            color: #333;
-            margin-bottom: 30px;
+            color: #1e293b;
+            margin: 0 0 10px;
+            font-size: clamp(28px, 4.5vw, 48px);
+            font-weight: 800;
+        }
+
+        .tv-guide {
+            font-size: clamp(14px, 2vw, 18px);
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tv-badge {
+            background: #e2e8f0;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.9em;
+            color: #334155;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 24px;
-            margin-top: 30px;
+            margin-top: 10px;
             padding: 0;
             list-style: none;
         }
 
         .game-card {
+            position: relative;
             background: #fff;
-            border-radius: 12px;
+            border-radius: 20px;
             overflow: hidden;
             text-decoration: none;
             color: #333;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            border: 4px solid transparent;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
         }
 
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-        }
 
-        .game-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
+            .game-card:hover,
+            .game-card:focus,
+            .game-card:focus-visible,
+            .game-card.tv-focused {
+                transform: translateY(-8px) scale(1.04);
+                border-color: #2563eb;
+                box-shadow: 0 16px 36px rgba(37, 99, 235, 0.35);
+                z-index: 5;
+            }
 
-        .game-card h3 {
-            margin: 0;
-            padding: 16px;
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
+            .game-card .thumb-wrap {
+                position: relative;
+                width: 100%;
+                height: 220px;
+                overflow: hidden;
+                background: #f1f5f9;
+            }
+
+            .game-card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+            }
+
+            .game-card:hover img,
+            .game-card:focus img,
+            .game-card.tv-focused img {
+                transform: scale(1.06);
+            }
+
+            /* Phím số trên Remote TV */
+            .card-num-badge {
+                position: absolute;
+                top: 12px;
+                left: 12px;
+                width: 38px;
+                height: 38px;
+                background: rgba(15, 23, 42, 0.85);
+                color: #ffffff;
+                border: 2px solid rgba(255, 255, 255, 0.8);
+                border-radius: 12px;
+                font-size: 20px;
+                font-weight: 800;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(4px);
+                z-index: 2;
+            }
+
+            .game-card h3 {
+                margin: 0;
+                padding: 16px 12px;
+                font-size: clamp(16px, 2.5vw, 20px);
+                font-weight: 800;
+                color: #1e293b;
+            }
+
+            @media (min-width: 1200px) {
+                .game-grid {
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 28px;
+                }
+
+                .game-card .thumb-wrap {
+                    height: 240px;
+                }
+            }
     </style>
 </head>
 
 <body>
     <div class="container">
         <h1>Tuyển tập Mini Game</h1>
+        <div class="tv-guide">
+            <span class="tv-badge">📺 Điều khiển TV: Dùng phím Mũi tên ⬅️ ➡️ ⬆️ ⬇️ và bấm <b>OK</b></span>
+            <span class="tv-badge">🔢 Hoặc bấm trực tiếp phím số <b>1 - 7</b> trên Remote</span>
+        </div>
         <div id="game-list" class="game-grid"></div>
     </div>
 
@@ -103,28 +199,105 @@
                 name: '🐟 Bắt Cá',
                 link: 'games/fish-catching/',
                 thumb: 'https://media.coolmate.me/image/2026/03/08/Gemini_Generated_Image_5a27eh5a27eh5a27.png'
+            },
+            {
+                name: '🍖 Cho Bạn Thú Ăn',
+                link: 'games/feed-animals/',
+                thumb: 'games/feed-animals/thumb.svg'
+            },
+            {
+                name: '🐾 Tìm Bóng Con Vật',
+                link: 'games/shadow-match/',
+                thumb: 'games/shadow-match/thumb.svg'
             }
         ];
 
         const gameListContainer = document.getElementById('game-list');
+        const cardElements = [];
 
-        games.forEach(game => {
-            const card = document.createElement('a');
-            card.href = game.link;
-            card.className = 'game-card';
+            games.forEach((game, index) => {
+                const card = document.createElement('a');
+                card.href = game.link;
+                card.className = 'game-card';
+                card.tabIndex = 0;
+                card.dataset.index = index;
 
-            const thumb = document.createElement('img');
-            thumb.src = game.thumb;
-            thumb.alt = game.name;
+                const thumbWrap = document.createElement('div');
+                thumbWrap.className = 'thumb-wrap';
 
-            const title = document.createElement('h3');
-            title.textContent = game.name;
+                // Phím số chỉ dẫn trên TV
+                const numBadge = document.createElement('div');
+                numBadge.className = 'card-num-badge';
+                numBadge.textContent = (index + 1);
 
-            card.appendChild(thumb);
-            card.appendChild(title);
+                const thumb = document.createElement('img');
+                thumb.src = game.thumb;
+                thumb.alt = game.name;
+                thumb.loading = 'lazy';
 
-            gameListContainer.appendChild(card);
-        });
+                thumbWrap.appendChild(numBadge);
+                thumbWrap.appendChild(thumb);
+
+                const title = document.createElement('h3');
+                title.textContent = game.name;
+
+                card.appendChild(thumbWrap);
+                card.appendChild(title);
+
+                gameListContainer.appendChild(card);
+                cardElements.push(card);
+            });
+
+            // Điều khiển bằng Remote TV (D-Pad & Phím Số)
+            let currentFocusIdx = 0;
+            if (cardElements.length > 0) {
+                cardElements[0].focus();
+            }
+
+            function setFocus(idx) {
+                if (idx < 0) idx = 0;
+                if (idx >= cardElements.length) idx = cardElements.length - 1;
+                currentFocusIdx = idx;
+                cardElements[currentFocusIdx].focus();
+            }
+
+            window.addEventListener('keydown', (e) => {
+                const key = e.key;
+                const code = e.keyCode;
+
+                // Phím số 1-7 trên Remote TV
+                if (key >= '1' && key <= '9') {
+                    const num = parseInt(key, 10);
+                    if (num >= 1 && num <= cardElements.length) {
+                        e.preventDefault();
+                        cardElements[num - 1].click();
+                        return;
+                    }
+                }
+
+                // Mũi tên trái / phải
+                if (key === 'ArrowRight') {
+                    e.preventDefault();
+                    setFocus(currentFocusIdx + 1);
+                } else if (key === 'ArrowLeft') {
+                    e.preventDefault();
+                    setFocus(currentFocusIdx - 1);
+                } else if (key === 'ArrowDown') {
+                    e.preventDefault();
+                    const cols = Math.round(gameListContainer.clientWidth / cardElements[0].clientWidth) || 4;
+                    setFocus(currentFocusIdx + cols);
+                } else if (key === 'ArrowUp') {
+                    e.preventDefault();
+                    const cols = Math.round(gameListContainer.clientWidth / cardElements[0].clientWidth) || 4;
+                    setFocus(currentFocusIdx - cols);
+                } else if (key === 'Enter' || code === 13) {
+                    if (document.activeElement && document.activeElement.classList.contains('game-card')) {
+                        document.activeElement.click();
+                    } else {
+                        cardElements[currentFocusIdx].click();
+                    }
+                }
+            });
     </script>
 </body>
 

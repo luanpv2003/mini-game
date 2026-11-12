@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="400" height="250">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="50%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#fbcfe8"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect width="400" height="250" fill="url(#bg)" rx="16"/>
+  <circle cx="200" cy="115" r="75" fill="#ffffff" filter="url(#shadow)"/>
+  <circle cx="200" cy="115" r="70" fill="#fff7ed" stroke="#fb923c" stroke-width="4"/>
+  <text x="200" y="142" font-size="78" text-anchor="middle" font-family="sans-serif">🐵</text>
+  <g filter="url(#shadow)">
+    <circle cx="110" cy="180" r="32" fill="#ffffff"/>
+    <text x="110" y="193" font-size="34" text-anchor="middle" font-family="sans-serif">🍌</text>
+  </g>
+  <g filter="url(#shadow)">
+    <circle cx="290" cy="180" r="32" fill="#ffffff"/>
+    <text x="290" y="193" font-size="34" text-anchor="middle" font-family="sans-serif">🥕</text>
+  </g>
+  <text x="200" y="232" font-size="18" font-weight="bold" fill="#ea580c" text-anchor="middle" font-family="'Baloo 2', sans-serif">🍖 CHO BẠN THÚ ĂN</text>
+</svg>
+

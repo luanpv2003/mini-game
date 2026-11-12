@@ -1,0 +1,495 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background: linear-gradient(135deg, #fef3c7 0%, #dbeafe 50%, #fce7f3 100%);
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  font-family: 'Baloo 2', cursive, sans-serif;
+}
+
+.game-wrapper {
+  max-width: 650px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 16px 24px;
+}
+
+header h1 {
+  font-size: clamp(26px, 6vw, 38px);
+  margin: 8px 0 2px;
+  color: #ea580c;
+  text-shadow: 2px 2px 0 #fff;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: clamp(14px, 3.5vw, 17px);
+  color: #64748b;
+  font-weight: 700;
+}
+
+.game-stage {
+  position: relative;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 28px;
+  box-shadow: 0 16px 36px rgba(148, 163, 184, 0.25), 0 0 0 4px #fed7aa;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+#fx-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* Bong bóng thoại */
+.speech-bubble {
+  position: relative;
+  background: #fef08a;
+  color: #854d0e;
+  font-weight: 800;
+  font-size: clamp(16px, 3.8vw, 21px);
+  padding: 10px 22px;
+  border-radius: 22px;
+  border: 3px solid #facc15;
+  box-shadow: 0 6px 14px rgba(234, 179, 8, 0.25);
+  margin-bottom: 12px;
+  animation: floatBubble 2.4s ease-in-out infinite alternate;
+  text-align: center;
+  max-width: 90%;
+  transition: all 0.25s ease;
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 12px 10px 0;
+  border-style: solid;
+  border-color: #facc15 transparent;
+  display: block;
+  width: 0;
+}
+
+@keyframes floatBubble {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-6px); }
+}
+
+/* Khu vực con vật */
+.animal-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 16px;
+}
+
+.glow-ring {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 215, 170, 0.8) 0%, rgba(253, 230, 138, 0.2) 70%, transparent 100%);
+  animation: pulseGlow 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(0.95); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 0.95; }
+}
+
+.animal-avatar {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 5px solid #fb923c;
+  box-shadow: 0 10px 24px rgba(251, 146, 60, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 88px;
+  z-index: 2;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+
+.animal-emoji {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.chewing-fx {
+  position: absolute;
+  font-size: 54px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* Hiệu ứng khi con vật há miệng chờ ăn */
+.animal-avatar.mouth-open {
+  transform: scale(1.14);
+  border-color: #22c55e;
+  box-shadow: 0 0 28px rgba(34, 197, 94, 0.6);
+}
+
+.animal-avatar.mouth-open .animal-emoji {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+/* Hiệu ứng khi con vật nhai */
+.animal-avatar.chewing {
+  animation: chewAnim 0.4s ease-in-out infinite;
+  border-color: #ec4899;
+}
+
+.animal-avatar.chewing .chewing-fx {
+  opacity: 1;
+  animation: munchPop 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes chewAnim {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15, 0.9) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes munchPop {
+  0% { transform: scale(0.8) translateY(0); }
+  100% { transform: scale(1.2) translateY(-8px); }
+}
+
+/* Hiệu ứng con vật lắc đầu khi sai */
+.animal-avatar.shake {
+  animation: shakeAnim 0.5s ease-in-out;
+}
+
+@keyframes shakeAnim {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-14px) rotate(-8deg); }
+  40%, 80% { transform: translateX(14px) rotate(8deg); }
+}
+
+/* Hiệu ứng con vật nhảy cẫng lên khi no bụng */
+.animal-avatar.jump {
+  animation: jumpAnim 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes jumpAnim {
+  0% { transform: scale(1) translateY(0); }
+  40% { transform: scale(1.2, 0.85) translateY(-32px); }
+  70% { transform: scale(0.95, 1.1) translateY(4px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+.animal-name-badge {
+  position: absolute;
+  bottom: -10px;
+  background: #ea580c;
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(14px, 3.2vw, 17px);
+  padding: 4px 16px;
+  border-radius: 999px;
+  box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);
+  z-index: 3;
+  white-space: nowrap;
+}
+
+/* Khay thức ăn */
+.food-dock {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.food-dock-title {
+  font-size: clamp(14px, 3.2vw, 16px);
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.food-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 3.5vw, 24px);
+  flex-wrap: wrap;
+  width: 100%;
+  min-height: 120px;
+}
+
+/* Thẻ thức ăn to, bóng bẩy cho trẻ nhỏ */
+.food-card {
+  position: relative;
+  width: clamp(86px, 24vw, 114px);
+  height: clamp(86px, 24vw, 114px);
+  background: #fff;
+  border-radius: 24px;
+  border: 4px solid #fed7aa;
+  box-shadow: 0 8px 18px rgba(251, 146, 60, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s;
+  outline: none;
+}
+
+.food-card:hover,
+.food-card:focus,
+.food-card:focus-visible,
+.food-card.tv-focused {
+  transform: translateY(-8px) scale(1.08);
+  border-color: #2563eb;
+  outline: 5px solid #3b82f6;
+  outline-offset: 4px;
+  box-shadow: 0 16px 36px rgba(37, 99, 235, 0.4);
+  z-index: 5;
+}
+
+.food-card .tv-key-badge {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  background: #1e293b;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.btn-secondary:focus,
+.btn-secondary:focus-visible,
+.btn-secondary.tv-focused {
+  outline: 4px solid #2563eb;
+  outline-offset: 2px;
+  background: #e2e8f0;
+  transform: translateY(-3px) scale(1.04);
+}
+
+.tv-bar-hint {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 700;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tv-bar-hint span {
+  background: #f1f5f9;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+}
+
+/* TV & Large Display Optimization (1080p / 4K / TV screen) */
+@media (min-width: 960px) and (min-height: 600px) {
+  .game-wrapper {
+    max-width: 950px;
+    padding: 24px 32px;
+  }
+  .game-stage {
+    padding: 30px 40px;
+    border-radius: 36px;
+  }
+  .speech-bubble {
+    font-size: 24px;
+    padding: 14px 30px;
+    border-radius: 26px;
+    border-width: 4px;
+  }
+  .animal-container {
+    width: 220px;
+    height: 220px;
+    margin: 10px 0 20px;
+  }
+  .glow-ring {
+    width: 220px;
+    height: 220px;
+  }
+  .animal-avatar {
+    width: 190px;
+    height: 190px;
+    font-size: 110px;
+    border-width: 6px;
+  }
+  .animal-name-badge {
+    font-size: 19px;
+    padding: 6px 22px;
+  }
+  .food-dock-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+  .food-options {
+    gap: 28px;
+  }
+  .food-card {
+    width: 140px;
+    height: 140px;
+    border-radius: 28px;
+    border-width: 5px;
+  }
+  .food-card .tv-key-badge {
+    font-size: 16px;
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+  .food-emoji {
+    font-size: 68px;
+  }
+  .food-label {
+    font-size: 17px;
+    margin-top: 6px;
+  }
+  .btn-secondary {
+    font-size: 18px;
+    padding: 12px 24px;
+    border-radius: 18px;
+  }
+  .tv-bar-hint {
+    font-size: 16px;
+  }
+}
+
+.food-card:hover {
+  transform: translateY(-4px) scale(1.04);
+  border-color: #fb923c;
+  box-shadow: 0 12px 24px rgba(251, 146, 60, 0.3);
+}
+
+.food-card:active {
+  transform: scale(0.94);
+}
+
+.food-emoji {
+  font-size: clamp(44px, 12vw, 56px);
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
+}
+
+.food-label {
+  margin-top: 4px;
+  font-size: clamp(12px, 2.8vw, 14px);
+  font-weight: 800;
+  color: #475569;
+  pointer-events: none;
+}
+
+/* Thức ăn đang bay */
+.food-flying {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s;
+}
+
+/* Thức ăn bị rung nhẹ khi sai */
+.food-card.wrong {
+  animation: wobbleCard 0.4s ease-in-out;
+  border-color: #f87171;
+  background: #fef2f2;
+}
+
+@keyframes wobbleCard {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(0.96) rotate(-8deg); }
+  75% { transform: scale(0.96) rotate(8deg); }
+}
+
+/* Thanh điều khiển */
+.controls-bar {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 800;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 8px 18px;
+  font-size: clamp(14px, 3vw, 16px);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.btn-secondary:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+  .game-stage {
+    padding: 16px 10px;
+  }
+  .animal-container {
+    width: 150px;
+    height: 150px;
+    margin: 4px 0 12px;
+  }
+  .animal-avatar {
+    width: 125px;
+    height: 125px;
+    font-size: 72px;
+  }
+  .glow-ring {
+    width: 140px;
+    height: 140px;
+  }
+}
+

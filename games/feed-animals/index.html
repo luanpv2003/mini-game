@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cho Bạn Thú Ăn - Mini Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="/" class="back-link">&larr; Trang chủ</a>
+  <div id="fullscreen-btn"></div>
+
+  <div class="wrap game-wrapper">
+    <header>
+      <h1>🍖 Cho Bạn Thú Ăn</h1>
+      <p class="subtitle">Bé hãy chọn đúng món ăn ngon cho từng bạn nhé!</p>
+    </header>
+
+    <main class="game-stage">
+      <!-- Bong bóng thoại -->
+      <div class="speech-bubble" id="speech-bubble">
+        <span id="speech-text">Đói bụng quá! Cho tớ ăn với~</span>
+      </div>
+
+      <!-- Khu vực nhân vật con vật -->
+      <div class="animal-container" id="animal-container">
+        <div class="glow-ring"></div>
+        <div class="animal-avatar" id="animal-avatar">
+          <div class="animal-emoji" id="animal-emoji">🐵</div>
+          <div class="chewing-fx" id="chewing-fx">😋</div>
+        </div>
+        <div class="animal-name-badge" id="animal-name">Bạn Khỉ Con</div>
+      </div>
+
+      <!-- Khu vực hạt hiệu ứng bay -->
+      <canvas id="fx-canvas"></canvas>
+
+      <!-- Khay thức ăn cho bé chọn -->
+      <div class="food-dock">
+        <div class="food-dock-title">👇 Chạm hoặc kéo món ăn vào miệng bạn nhé:</div>
+        <div class="food-options" id="food-options">
+          <!-- Các món ăn sinh động được sinh tự động bằng JS -->
+        </div>
+      </div>
+
+      <!-- Thanh điều khiển phía dưới -->
+      <div class="controls-bar">
+        <button class="btn btn-secondary" id="btn-next">
+          <span>Bạn thú khác</span> 🐾
+        </button>
+        <button class="btn btn-secondary" id="btn-sound">
+          <span id="sound-label">Âm thanh: Bật 🔊</span>
+        </button>
+      </div>
+
+      <!-- Hướng dẫn điều khiển TV -->
+      <div class="tv-bar-hint">
+        <span>📺 Remote TV: Phím <b>1, 2, 3</b> để chọn nhanh món ăn</span>
+        <span>Mũi tên ⬅️ ➡️ và <b>OK</b> để đút ăn</span>
+        <span>Phím <b>Back / Esc</b> để về Trang chủ</span>
+      </div>
+    </main>
+
+    <!-- Thông báo ngắn vui nhộn -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
